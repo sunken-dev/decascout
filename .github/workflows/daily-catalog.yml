@@ -1,0 +1,38 @@
+name: Refresh catalogue
+
+# The daily schedule is disabled for now; the job only runs when started manually.
+on:
+  # schedule:
+  #   - cron: "17 2 * * *"
+  workflow_dispatch:
+    inputs:
+      countries:
+        description: "Comma-separated country codes to scan (empty = all)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: catalogue-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Discover products and refresh prices
+        env:
+          COUNTRIES: ${{ inputs.countries }}
+        run: python scripts/discover_catalog.py ${COUNTRIES:+--country "$COUNTRIES"}
+      - name: Commit the current snapshot
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "chore: refresh catalogue"
+          file_pattern: "data/catalog.json data/catalog.csv data/stores.json data/delta.json data/history"
