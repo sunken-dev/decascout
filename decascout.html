@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DecaScout — Compare Decathlon prices across countries</title>
+  <meta name="description" content="Compare Decathlon prices across countries. DecaScout shows the cheapest market for each product, normalised to EUR and refreshed daily." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#3643ba" />
+  <meta name="color-scheme" content="light" />
+  <link rel="canonical" href="https://decascout.sunken.dev/" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="DecaScout" />
+  <meta property="og:title" content="DecaScout — Compare Decathlon prices across countries" />
+  <meta property="og:description" content="Compare Decathlon prices across countries. DecaScout shows the cheapest market for each product, normalised to EUR and refreshed daily." />
+  <meta property="og:url" content="https://decascout.sunken.dev/" />
+  <meta property="og:locale" content="en" />
+  <meta property="og:image" content="https://decascout.sunken.dev/assets/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="DecaScout: the same product priced differently across European Decathlon shops, with the cheapest market highlighted." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DecaScout — Compare Decathlon prices across countries" />
+  <meta name="twitter:description" content="Compare Decathlon prices across countries. DecaScout shows the cheapest market for each product, normalised to EUR and refreshed daily." />
+  <meta name="twitter:image" content="https://decascout.sunken.dev/assets/og-image.png" />
+  <meta name="twitter:image:alt" content="DecaScout: the same product priced differently across European Decathlon shops, with the cheapest market highlighted." />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "DecaScout",
+    "url": "https://decascout.sunken.dev/",
+    "description": "Compare Decathlon prices across countries. DecaScout shows the cheapest market for each product, normalised to EUR and refreshed daily.",
+    "applicationCategory": "ShoppingApplication",
+    "operatingSystem": "Any",
+    "inLanguage": "en",
+    "image": "https://decascout.sunken.dev/assets/og-image.png",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+  }
+  </script>
+  <style>
+    :root {
+      --ink: #101828;
+      --ink-soft: #5d6678;
+      --paper: #f4f6fb;
+      --panel: #ffffff;
+      --line: #e1e5f0;
+      --decathlon-blue: #3643ba;
+      --decathlon-blue-dark: #28339f;
+      --decathlon-blue-pale: #e8ebff;
+      --decathlon-blue-soft: #cbd2ff;
+      --decathlon-red: #e30613;
+      --decathlon-red-pale: #fff0f1;
+      --decathlon-yellow: #ffcd00;
+      --shadow: 0 18px 45px rgba(39, 49, 115, .09);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 11px;
+    }
+
+    * { box-sizing: border-box; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 90% -10%, rgba(203, 210, 255, .72), transparent 30%),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 16px;
+      top: -64px;
+      z-index: 100;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      background: var(--decathlon-blue);
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .skip-link:focus { top: 12px; }
+
+    :focus-visible { outline: 3px solid var(--decathlon-blue); outline-offset: 2px; }
+    .search-box input:focus-visible, .filter-select:focus-visible { outline: 3px solid var(--decathlon-blue); outline-offset: 1px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .app-shell { min-height: 100vh; }
+
+    .topbar {
+      width: min(1420px, calc(100% - 48px));
+      margin: 0 auto;
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand-lockup { display: flex; align-items: center; gap: 11px; }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: var(--decathlon-blue);
+      color: white;
+      box-shadow: 0 8px 18px rgba(54, 67, 186, .2);
+    }
+
+    .brand-mark svg { width: 24px; height: 24px; }
+    .brand-name { font-size: 19px; letter-spacing: -.04em; font-weight: 800; }
+    .brand-tag { margin-left: 3px; color: var(--ink-soft); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+
+    .market-select,
+    .ghost-button,
+    .primary-button,
+    .icon-button {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      border-radius: 12px;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .market-select:hover,
+    .ghost-button:hover,
+    .primary-button:hover,
+    .icon-button:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(39, 49, 115, .09); }
+
+    .market-select { padding: 10px 34px 10px 12px; appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--ink-soft) 50%), linear-gradient(135deg, var(--ink-soft) 50%, transparent 50%); background-position: calc(100% - 16px) 16px, calc(100% - 11px) 16px; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
+    .basket-button { position: relative; display: flex; align-items: center; gap: 8px; padding: 10px 13px; }
+    .basket-button svg { width: 17px; height: 17px; }
+    .count-dot { min-width: 20px; height: 20px; display: inline-grid; place-items: center; border-radius: 20px; background: var(--decathlon-blue); color: white; font-size: 11px; font-weight: 800; }
+
+    .main { width: min(1420px, calc(100% - 48px)); margin: 0 auto; padding: 24px 0 48px; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(260px, .6fr);
+      gap: 24px;
+      padding: 30px 32px;
+      border: 1px solid #d4d9ff;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(118deg, #eef0ff 0%, #e2e6ff 57%, #d7dcff 100%);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -165px;
+      top: -165px;
+      border: 1px solid rgba(54, 67, 186, .13);
+      border-radius: 50%;
+      box-shadow: 0 0 0 42px rgba(54, 67, 186, .04), 0 0 0 84px rgba(54, 67, 186, .03), 0 0 0 126px rgba(54, 67, 186, .025);
+      pointer-events: none;
+    }
+
+    .eyebrow { margin: 0 0 9px; color: var(--decathlon-blue); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .hero h1 { max-width: 720px; margin: 0; font-size: clamp(32px, 4.2vw, 59px); line-height: .98; letter-spacing: -.075em; font-weight: 850; }
+    .hero-copy { max-width: 590px; margin: 18px 0 22px; color: #53607a; font-size: 16px; line-height: 1.55; }
+    .hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .primary-button { border-color: var(--decathlon-blue); background: var(--decathlon-blue); color: white; padding: 12px 16px; font-weight: 800; }
+    .primary-button:hover { background: var(--decathlon-blue-dark); }
+    .ghost-button { padding: 11px 14px; font-weight: 750; }
+    .hero-note { color: #69738b; font-size: 12px; }
+    .snapshot-rail { max-width: 650px; margin-top: 24px; padding: 14px 15px; border: 1px solid rgba(54, 67, 186, .16); border-radius: 16px; background: rgba(255,255,255,.57); position: relative; z-index: 1; }
+    .snapshot-rail-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--decathlon-blue-dark); font-size: 11px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .snapshot-rail-head span:first-child { display: inline-flex; align-items: center; gap: 7px; }
+    .snapshot-rail-head span:first-child::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--decathlon-red); box-shadow: 0 0 0 4px rgba(227,6,19,.12); }
+    .snapshot-rail-copy { margin-top: 8px; color: #64708b; font-size: 11px; line-height: 1.45; }
+
+    .hero-insight { align-self: end; padding: 18px; border: 1px solid rgba(54, 67, 186, .14); border-radius: 18px; background: rgba(255,255,255,.47); position: relative; z-index: 1; }
+    .insight-kicker { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; color: #69738b; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--decathlon-red); box-shadow: 0 0 0 4px rgba(227, 6, 19, .12); }
+    .insight-value { display: flex; align-items: baseline; gap: 8px; }
+    .insight-value strong { font-size: 48px; line-height: 1; letter-spacing: -.07em; }
+    .insight-value span { color: var(--decathlon-blue); font-size: 14px; font-weight: 800; }
+    .insight-label { margin-top: 8px; color: #5f6b82; font-size: 13px; line-height: 1.4; }
+    .insight-sparkline { width: 100%; height: 46px; margin-top: 17px; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 18px 0 26px; }
+    .stat-card { padding: 17px 18px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.84); box-shadow: 0 6px 16px rgba(39, 49, 115, .035); }
+    .stat-label { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--ink-soft); font-size: 12px; font-weight: 750; }
+    .stat-label svg { width: 15px; height: 15px; color: var(--decathlon-blue); }
+    .stat-value { margin-top: 9px; font-size: 26px; letter-spacing: -.05em; font-weight: 850; }
+    .stat-sub { margin-top: 3px; color: #7c8598; font-size: 11px; }
+
+    .workspace-grid { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(390px, .82fr); gap: 18px; align-items: start; }
+    .panel { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--panel); box-shadow: var(--shadow); }
+    .catalog-panel { overflow: hidden; }
+    .panel-header { padding: 23px 24px 18px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .panel-header h2 { margin: 0; font-size: 22px; letter-spacing: -.05em; }
+    .panel-header p:not(.eyebrow) { margin: 6px 0 0; color: var(--ink-soft); font-size: 13px; }
+    .coverage-pill { display: inline-flex; align-items: center; gap: 7px; padding: 8px 10px; border-radius: 20px; background: var(--decathlon-blue-pale); color: var(--decathlon-blue-dark); font-size: 11px; font-weight: 800; white-space: nowrap; }
+    .coverage-pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--decathlon-blue); }
+
+    .filters { display: grid; grid-template-columns: minmax(180px, 1fr) 140px auto; gap: 10px; padding: 0 24px 19px; border-bottom: 1px solid var(--line); }
+    .search-box { position: relative; }
+    .search-box svg { position: absolute; width: 17px; height: 17px; left: 12px; top: 11px; color: #8c94a8; }
+    .search-box input, .filter-select { width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 11px; outline: none; background: #fbfcff; color: var(--ink); }
+    .search-box input { padding: 0 12px 0 38px; }
+    .search-box input:focus, .filter-select:focus { border-color: var(--decathlon-blue); box-shadow: 0 0 0 3px rgba(54, 67, 186, .1); }
+    .filter-select { padding: 0 28px 0 11px; appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--ink-soft) 50%), linear-gradient(135deg, var(--ink-soft) 50%, transparent 50%); background-position: calc(100% - 15px) 17px, calc(100% - 10px) 17px; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
+    .toggle { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 10px; border: 1px solid var(--line); border-radius: 11px; color: var(--ink-soft); font-size: 12px; font-weight: 750; background: #fbfcff; white-space: nowrap; }
+    .toggle input { width: 16px; height: 16px; accent-color: var(--decathlon-blue); }
+
+    .product-list { padding: 8px 10px 13px; }
+    .product-row { width: 100%; padding: 14px; display: grid; grid-template-columns: 52px minmax(145px, 1fr) 126px 144px 18px; align-items: center; gap: 13px; border: 0; border-bottom: 1px solid #eceef6; background: transparent; color: inherit; text-align: left; border-radius: 14px; }
+    .product-row:last-child { border-bottom: 0; }
+    .product-row:hover, .product-row.selected { background: #f3f4ff; }
+    .product-row.selected { box-shadow: inset 3px 0 0 var(--decathlon-blue); }
+    .product-thumb { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 15px; background: linear-gradient(145deg, #eef0ff, #d7dcff); font-size: 25px; }
+    .product-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 820; letter-spacing: -.02em; }
+    .product-meta { display: flex; align-items: center; gap: 7px; margin-top: 5px; color: #7a8499; font-size: 11px; }
+    .meta-bullet { width: 3px; height: 3px; border-radius: 50%; background: #b1b7c7; }
+    .price-stack, .best-stack { display: flex; flex-direction: column; gap: 3px; }
+    .price-stack .label, .best-stack .label { color: #8992a6; font-size: 10px; font-weight: 750; text-transform: uppercase; letter-spacing: .07em; }
+    .price-stack strong, .best-stack strong { font-size: 15px; letter-spacing: -.03em; }
+    .price-local { color: #8992a6; font-size: 10px; }
+    .best-country { display: inline-flex; align-items: center; gap: 5px; color: var(--decathlon-blue-dark); font-size: 11px; font-weight: 800; }
+    .saving { color: var(--decathlon-red); font-size: 11px; font-weight: 800; }
+    .chevron { color: #9ba3b5; }
+    .empty-state { padding: 46px 20px; color: var(--ink-soft); text-align: center; }
+    .empty-state strong { display: block; margin-bottom: 6px; color: var(--ink); }
+
+    .detail-panel { position: sticky; top: 18px; padding: 24px; overflow: hidden; }
+    .detail-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; }
+    .detail-top h2 { max-width: 380px; margin: 0; font-size: 27px; line-height: 1.05; letter-spacing: -.06em; }
+    .detail-top p { margin: 8px 0 0; color: var(--ink-soft); font-size: 12px; }
+    .detail-icon { width: 58px; height: 58px; display: grid; place-items: center; border-radius: 17px; background: #eef0ff; font-size: 30px; flex: 0 0 auto; }
+    .detail-actions { display: flex; gap: 9px; margin-top: 20px; }
+    .detail-actions button { flex: 1; }
+    .secondary-button { border: 1px solid var(--line); border-radius: 11px; background: #fff; color: var(--ink); padding: 11px 12px; font-size: 12px; font-weight: 800; }
+    .secondary-button:hover { border-color: var(--decathlon-blue); color: var(--decathlon-blue-dark); }
+    .detail-section { margin-top: 25px; padding-top: 21px; border-top: 1px solid var(--line); }
+    .section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .section-heading h3 { margin: 0; font-size: 14px; letter-spacing: -.02em; }
+    .section-heading span { color: #8992a6; font-size: 11px; }
+    .best-deal { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px; border-radius: 14px; background: linear-gradient(120deg, #eef0ff, #f8f9ff); }
+    .deal-place { display: flex; align-items: center; gap: 9px; }
+    .deal-flag { font-size: 22px; }
+    .deal-place strong { display: block; font-size: 14px; }
+    .deal-place span { display: block; margin-top: 3px; color: #768199; font-size: 11px; }
+    .deal-price { text-align: right; }
+    .deal-price strong { display: block; font-size: 23px; letter-spacing: -.05em; }
+    .deal-price span { color: var(--decathlon-blue); font-size: 11px; font-weight: 850; }
+    .price-chart { display: flex; flex-direction: column; gap: 11px; }
+    .bar-row { display: grid; grid-template-columns: 75px minmax(80px, 1fr) 65px; align-items: center; gap: 8px; font-size: 11px; }
+    .bar-label { display: flex; align-items: center; gap: 5px; color: var(--ink-soft); font-weight: 750; }
+    .bar-track { height: 8px; border-radius: 8px; background: #edf0f7; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: inherit; background: #bec6ff; }
+    .bar-row.current .bar-fill { background: var(--decathlon-red); }
+    .bar-row.best .bar-fill { background: var(--decathlon-blue); }
+    .bar-price { color: var(--ink); text-align: right; font-weight: 800; }
+    .bar-row.current .bar-price { color: #c9000d; }
+    .bar-row.best .bar-price { color: var(--decathlon-blue-dark); }
+    .check-list { display: grid; gap: 10px; }
+    .check-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--ink-soft); font-size: 12px; }
+    .check-row > span:first-child { display: flex; align-items: center; gap: 8px; }
+    .check-icon { width: 18px; height: 18px; display: grid; place-items: center; border-radius: 50%; background: var(--decathlon-blue-pale); color: var(--decathlon-blue); font-size: 11px; font-weight: 900; }
+    .check-value { color: var(--ink); font-weight: 800; }
+    .prototype-note { margin-top: 18px; padding: 11px 12px; border-radius: 11px; background: #f6f7ff; color: #65709b; font-size: 10px; line-height: 1.45; }
+
+    .drawer-backdrop { position: fixed; inset: 0; background: rgba(16, 24, 40, .28); opacity: 0; pointer-events: none; transition: opacity .22s ease; z-index: 10; }
+    .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+    .drawer { position: fixed; top: 0; right: 0; width: min(460px, 100%); height: 100vh; padding: 24px; background: #fff; box-shadow: -18px 0 50px rgba(39, 49, 115, .17); transform: translateX(100%); transition: transform .25s ease; z-index: 11; overflow-y: auto; }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .drawer-header h2 { margin: 0; font-size: 25px; letter-spacing: -.06em; }
+    .drawer-header p { margin: 7px 0 0; color: var(--ink-soft); font-size: 12px; }
+    .close-button { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 10px; background: white; color: var(--ink-soft); }
+    .basket-list { display: grid; gap: 10px; margin-top: 24px; }
+    .basket-item { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 11px; border: 1px solid var(--line); border-radius: 13px; }
+    .basket-item-icon { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 11px; background: #eef0ff; font-size: 19px; }
+    .basket-item strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+    .basket-item span { display: block; margin-top: 4px; color: #818aa0; font-size: 10px; }
+    .remove-item { padding: 4px; border: 0; background: transparent; color: #9ea6b8; }
+    .remove-item:hover { color: var(--decathlon-red); }
+    .basket-empty { padding: 40px 20px; border: 1px dashed #d2d7e4; border-radius: 14px; color: var(--ink-soft); text-align: center; font-size: 13px; line-height: 1.5; }
+    .basket-empty strong { display: block; margin-bottom: 7px; color: var(--ink); }
+    .basket-section { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line); }
+    .basket-section h3 { margin: 0; font-size: 14px; }
+    .basket-section p { margin: 5px 0 15px; color: var(--ink-soft); font-size: 11px; }
+    .total-table { display: grid; gap: 8px; }
+    .total-row { display: grid; grid-template-columns: minmax(0, 1fr) 88px 74px; align-items: center; gap: 9px; padding: 9px 0; border-bottom: 1px solid #eef0f6; font-size: 12px; }
+    .total-row:last-child { border-bottom: 0; }
+    .total-row.best-total { color: var(--decathlon-blue-dark); font-weight: 850; }
+    .total-country { display: flex; align-items: center; gap: 6px; font-weight: 760; }
+    .total-price { text-align: right; font-weight: 850; }
+    .total-saving { color: var(--decathlon-red); text-align: right; font-size: 10px; font-weight: 800; }
+    .toast { position: fixed; left: 50%; bottom: 26px; z-index: 30; padding: 12px 15px; border-radius: 12px; background: var(--ink); color: white; box-shadow: 0 12px 26px rgba(39, 49, 115, .2); font-size: 12px; font-weight: 750; opacity: 0; transform: translate(-50%, 14px); pointer-events: none; transition: opacity .2s ease, transform .2s ease; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 1120px) {
+      .workspace-grid { grid-template-columns: minmax(0, 1fr); }
+      .detail-panel { position: static; }
+      .hero { grid-template-columns: minmax(0, 1fr) 320px; }
+    }
+
+    @media (max-width: 820px) {
+      .topbar, .main { width: min(100% - 28px, 680px); }
+      .topbar { min-height: 72px; }
+      .brand-tag { display: none; }
+      .top-actions .market-select { max-width: 130px; }
+      .hero { grid-template-columns: 1fr; padding: 25px 22px; }
+      .hero-insight { max-width: 390px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .filters { grid-template-columns: 1fr 1fr; }
+      .toggle { grid-column: span 2; }
+      .product-row { grid-template-columns: 46px minmax(0, 1fr) 105px 18px; gap: 10px; }
+      .product-row .price-stack { display: none; }
+      .product-thumb { width: 46px; height: 46px; }
+    }
+
+    @media (max-width: 530px) {
+      .top-actions { gap: 6px; }
+      .basket-button .basket-label { display: none; }
+      .hero h1 { font-size: 39px; }
+      .stats-grid { gap: 9px; }
+      .stat-card { padding: 13px; }
+      .stat-value { font-size: 21px; }
+      .panel-header { padding-left: 18px; padding-right: 18px; }
+      .filters { padding-left: 18px; padding-right: 18px; }
+      .product-list { padding-left: 6px; padding-right: 6px; }
+      .product-row { grid-template-columns: 42px minmax(0, 1fr) 86px 14px; padding: 12px 8px; }
+      .product-thumb { width: 42px; height: 42px; font-size: 21px; }
+      .product-name { font-size: 12px; }
+      .best-stack strong { font-size: 13px; }
+      .detail-panel { padding: 18px; }
+      .snapshot-rail-head { align-items: flex-start; flex-direction: column; gap: 3px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#catalog">Skip to the product list</a>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="7.3"></circle>
+            <path d="m12 4.7 1.9 5.4L19.3 12l-5.4 1.9L12 19.3l-1.9-5.4L4.7 12l5.4-1.9L12 4.7Z" fill="currentColor" stroke="none"></path>
+            <circle cx="12" cy="12" r="2.2" fill="#3643ba" stroke="none"></circle>
+          </svg>
+        </div>
+        <div class="brand-name">DecaScout <span class="brand-tag">price intelligence</span></div>
+      </div>
+      <div class="top-actions">
+        <label class="sr-only" for="marketSelect">Your market</label>
+        <select id="marketSelect" class="market-select" aria-label="Your market"></select>
+        <button class="ghost-button basket-button" id="openBasket" aria-label="Open scout basket">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 11H6L5 8Z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>
+          <span class="basket-label">Scout basket</span>
+          <span class="count-dot" id="basketCount">0</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Cross-border shopping intelligence</p>
+          <h1>Find the best country price for every adventure.</h1>
+          <p class="hero-copy">DecaScout makes Decathlon’s country-by-country price differences visible — so you can spot the smarter market before you check out.</p>
+          <div class="hero-actions">
+            <button class="primary-button" id="scrollToProducts">Scout the catalogue <span aria-hidden="true">↘</span></button>
+            <span class="hero-note">Daily snapshot · current prices only</span>
+          </div>
+          <div class="snapshot-rail">
+            <div class="snapshot-rail-head"><span>Daily catalogue snapshot</span><span id="snapshotDate">Loading…</span></div>
+            <div class="snapshot-rail-copy">Prices are refreshed once per day across discovered country shops. This page reads the latest generated snapshot; it does not fetch retailer pages from the browser.</div>
+          </div>
+        </div>
+        <div class="hero-insight">
+          <div class="insight-kicker"><span>Current scout signal</span><span class="live-dot"></span></div>
+          <div class="insight-value"><strong id="heroSavings">€0</strong><span id="heroSavingsPct">0%</span></div>
+          <div class="insight-label">Potential basket saving when your selected products are sourced from their lowest-price markets.</div>
+          <svg class="insight-sparkline" viewBox="0 0 300 46" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 38 C24 36, 30 27, 48 30 S75 37, 91 24 S117 29, 133 19 S158 27, 172 18 S194 20, 210 12 S232 17, 250 9 S276 13, 300 3" fill="none" stroke="#3643ba" stroke-width="2.5" stroke-linecap="round"></path>
+            <path d="M0 38 C24 36, 30 27, 48 30 S75 37, 91 24 S117 29, 133 19 S158 27, 172 18 S194 20, 210 12 S232 17, 250 9 S276 13, 300 3 V46 H0Z" fill="url(#sparkFill)" opacity=".28"></path>
+            <defs><linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3643ba"></stop><stop offset="1" stop-color="#e8ebff"></stop></linearGradient></defs>
+          </svg>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="DecaScout overview">
+        <div class="stat-card"><div class="stat-label">Markets covered <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg></div><div class="stat-value" id="marketsCovered">—</div><div class="stat-sub">Discovered country shops</div></div>
+        <div class="stat-card"><div class="stat-label">Products scouted <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16v13H4z"></path><path d="M8 7V4h8v3M8 12h8M8 16h5"></path></svg></div><div class="stat-value" id="productsScouted">—</div><div class="stat-sub">Current active product IDs</div></div>
+        <div class="stat-card"><div class="stat-label">Largest gap today <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 16 5-5 4 3 7-8"></path><path d="M16 6h4v4"></path></svg></div><div class="stat-value" id="largestGap">€0</div><div class="stat-sub" id="largestGapName">Scanning your market</div></div>
+        <div class="stat-card"><div class="stat-label">Data freshness <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div><div class="stat-value" id="snapshotFreshness">—</div><div class="stat-sub">Daily generated snapshot</div></div>
+      </section>
+
+      <section class="workspace-grid" id="catalog">
+        <div class="panel catalog-panel">
+          <div class="panel-header">
+            <div><p class="eyebrow">Scout list</p><h2>Products worth checking</h2><p id="resultCount" role="status">6 products in your view</p></div>
+            <span class="coverage-pill">Normalized to EUR</span>
+          </div>
+          <div class="filters">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.8" cy="10.8" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
+              <label class="sr-only" for="searchInput">Search products</label>
+              <input id="searchInput" type="search" placeholder="Search product or code" autocomplete="off" />
+            </div>
+            <label class="sr-only" for="sportFilter">Filter by sport</label>
+            <select id="sportFilter" class="filter-select"><option value="all">All sports</option></select>
+            <label class="toggle"><input type="checkbox" id="stockFilter" /> In stock only</label>
+          </div>
+          <div class="product-list" id="productList"></div>
+        </div>
+
+        <aside class="panel detail-panel" id="detailPanel" aria-label="Product price comparison" aria-live="polite"></aside>
+      </section>
+    </main>
+    <noscript><p class="hero-note" style="padding:24px">DecaScout needs JavaScript to compare prices. The data is published as <a href="data/catalog.json">JSON</a> and <a href="data/catalog.csv">CSV</a>.</p></noscript>
+  </div>
+
+  <div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+  <aside class="drawer" id="basketDrawer" role="dialog" aria-modal="true" aria-label="Scout basket" inert>
+    <div class="drawer-header">
+      <div><p class="eyebrow">Your saved shortlist</p><h2>Scout basket</h2><p>Compare the whole basket, not just a single product.</p></div>
+      <button class="close-button" id="closeBasket" aria-label="Close basket">✕</button>
+    </div>
+    <div class="basket-list" id="basketList"></div>
+    <div class="basket-section" id="basketTotalsSection"></div>
+  </aside>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const fallbackCountries = {
+      at: { name: "Austria", short: "AT", flag: "🇦🇹", currency: "EUR", symbol: "€" },
+      de: { name: "Germany", short: "DE", flag: "🇩🇪", currency: "EUR", symbol: "€" },
+      fr: { name: "France", short: "FR", flag: "🇫🇷", currency: "EUR", symbol: "€" },
+      es: { name: "Spain", short: "ES", flag: "🇪🇸", currency: "EUR", symbol: "€" },
+      it: { name: "Italy", short: "IT", flag: "🇮🇹", currency: "EUR", symbol: "€" },
+      pl: { name: "Poland", short: "PL", flag: "🇵🇱", currency: "PLN", symbol: "zł" },
+      nl: { name: "Netherlands", short: "NL", flag: "🇳🇱", currency: "EUR", symbol: "€" },
+      cz: { name: "Czechia", short: "CZ", flag: "🇨🇿", currency: "CZK", symbol: "Kč" },
+      ch: { name: "Switzerland", short: "CH", flag: "🇨🇭", currency: "CHF", symbol: "CHF" },
+      be: { name: "Belgium", short: "BE", flag: "🇧🇪", currency: "EUR", symbol: "€" }
+    };
+
+    let countries = { ...fallbackCountries };
+    let catalogMeta = { generated_at: "", store_count: Object.keys(countries).length, product_count: 0 };
+    let products = [
+      { id: "8738453", name: "Forclaz MT100 sleeping bag", sport: "Hiking", category: "Camping", icon: "🏕️", rating: "—", sample: "Daily snapshot fixture", prices: { at: { eur: 34.99, local: "€34.99", stock: true }, de: { eur: 29.99, local: "€29.99", stock: true }, fr: { eur: 32.99, local: "€32.99", stock: true }, pl: { eur: 29.24, local: "129 zł", stock: true } } },
+      { id: "8558834", name: "Kipsta F900 football", sport: "Football", category: "Team sports", icon: "⚽", rating: "—", sample: "Daily snapshot fixture", prices: { at: { eur: 19.99, local: "€19.99", stock: true }, de: { eur: 17.99, local: "€17.99", stock: true }, fr: { eur: 18.99, local: "€18.99", stock: true }, pl: { eur: 15.86, local: "69.99 zł", stock: true } } }
+    ];
+    const state = { market: "at", selectedId: products[0].id, basket: new Set(), search: "", sport: "all", stockOnly: false };
+
+    const $ = (selector) => document.querySelector(selector);
+    const escapeHtml = (value) => String(value ?? "").replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[character]));
+    const numeric = (value) => value !== null && value !== "" && Number.isFinite(Number(value)) ? Number(value) : null;
+    const offerEur = (offer) => numeric(offer?.eur);
+    const eur = (value) => numeric(value) === null ? "—" : `€${numeric(value).toFixed(2)}`;
+    const currentProduct = () => products.find((product) => product.id === state.selectedId) || products[0] || null;
+    const countryFor = (code) => countries[code] || { name: String(code || "Unknown"), short: String(code || "—").toUpperCase(), flag: "🌍", currency: "", symbol: "" };
+    const bestOffers = (product, onlyInStock = false) => product ? Object.entries(product.prices || {}).filter(([, offer]) => !onlyInStock || offer.stock).sort(([, a], [, b]) => (offerEur(a) ?? Infinity) - (offerEur(b) ?? Infinity)) : [];
+    const bestOffer = (product, onlyInStock = false) => bestOffers(product, onlyInStock)[0];
+    const marketPrice = (product) => {
+      if (!product) return { code: state.market, eur: null, local: "—", stock: false };
+      if (product.prices?.[state.market]) return { ...product.prices[state.market], code: state.market };
+      const first = Object.entries(product.prices || {})[0];
+      return first ? { ...first[1], code: first[0] } : { code: state.market, eur: null, local: "—", stock: false };
+    };
+
+    function flagForCode(code) {
+      const normalized = String(code || "").toLowerCase().replace(/[^a-z]/g, "").slice(0, 2);
+      return normalized.length === 2 ? [...normalized].map((letter) => String.fromCodePoint(letter.charCodeAt(0) + 127397)).join("") : "🌍";
+    }
+
+    function normaliseStore(raw) {
+      const code = String(raw?.code || raw?.short || "").toLowerCase();
+      return { ...raw, code, name: raw?.name || code.toUpperCase(), short: raw?.short || code.toUpperCase(), flag: raw?.flag || flagForCode(code), currency: raw?.currency || "", symbol: raw?.symbol || "" };
+    }
+
+    function normaliseCatalogProduct(raw) {
+      const prices = Object.fromEntries(Object.entries(raw?.prices || {}).map(([code, offer]) => [code, {
+        ...offer,
+        price: numeric(offer?.price),
+        eur: offerEur(offer),
+        local: offer?.local || "—",
+        stock: offer?.stock !== false,
+        stockStatus: offer?.stock_status || offer?.stockStatus || "Unknown",
+        url: offer?.url || ""
+      }]));
+      return { ...raw, id: String(raw?.id || ""), name: raw?.name || `Decathlon item ${raw?.id || ""}`, sport: raw?.sport || "Discovered", category: raw?.category || "Decathlon product", icon: raw?.icon || "🟢", rating: raw?.rating || "—", sample: raw?.sample || "Daily public country-shop snapshot", prices };
+    }
+
+    function populateMarketSelect() {
+      const select = $("#marketSelect");
+      select.innerHTML = Object.entries(countries).map(([code, country]) => `<option value="${escapeHtml(code)}">${country.flag}  ${escapeHtml(country.name)}</option>`).join("");
+      select.value = countries[state.market] ? state.market : Object.keys(countries)[0] || "";
+      state.market = select.value || state.market;
+    }
+
+    function populateSportFilter() {
+      const filter = $("#sportFilter");
+      const sports = [...new Set(products.map((product) => product.sport).filter(Boolean))].sort();
+      filter.innerHTML = `<option value="all">All sports</option>${sports.map((sport) => `<option value="${escapeHtml(sport)}">${escapeHtml(sport)}</option>`).join("")}`;
+      filter.value = sports.includes(state.sport) ? state.sport : "all";
+      state.sport = filter.value;
+    }
+
+    function snapshotDate(iso, withTime = false) {
+      if (!iso) return "Not available";
+      const date = new Date(iso);
+      if (Number.isNaN(date.getTime())) return "Not available";
+      return date.toLocaleString(undefined, withTime ? { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" } : { month: "short", day: "numeric" });
+    }
+
+    function applyCatalog(payload) {
+      const stores = Array.isArray(payload.stores) ? payload.stores.map(normaliseStore).filter((store) => store.code) : [];
+      if (stores.length) countries = Object.fromEntries(stores.map((store) => [store.code, store]));
+      if (Array.isArray(payload.products)) products = payload.products.map(normaliseCatalogProduct).filter((product) => product.id);
+      catalogMeta = payload;
+      if (!products.some((product) => product.id === state.selectedId)) state.selectedId = products[0]?.id || "";
+      state.basket = new Set([...state.basket].filter((id) => products.some((product) => product.id === id)));
+      populateMarketSelect();
+      populateSportFilter();
+      renderAll();
+    }
+
+    async function loadCatalog() {
+      try {
+        const response = await fetch(`data/catalog.json?ts=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) throw new Error(`Snapshot request failed (${response.status})`);
+        const payload = await response.json();
+        applyCatalog(payload);
+      } catch (error) {
+        catalogMeta.load_error = error.message;
+        renderOverview();
+      }
+    }
+
+    function showToast(message) {
+      const toast = $("#toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timeout);
+      showToast.timeout = setTimeout(() => toast.classList.remove("show"), 2300);
+    }
+
+    function initControls() {
+      populateMarketSelect();
+      populateSportFilter();
+      $("#marketSelect").addEventListener("change", (event) => {
+        state.market = event.target.value;
+        renderAll();
+        showToast(`Benchmark market changed to ${countryFor(state.market).name}`);
+      });
+      $("#searchInput").addEventListener("input", (event) => { state.search = event.target.value.toLowerCase().trim(); renderProducts(); });
+      $("#sportFilter").addEventListener("change", (event) => { state.sport = event.target.value; renderProducts(); });
+      $("#stockFilter").addEventListener("change", (event) => { state.stockOnly = event.target.checked; renderProducts(); renderDetail(); });
+      $("#scrollToProducts").addEventListener("click", () => $("#catalog").scrollIntoView({ behavior: "smooth", block: "start" }));
+      $("#openBasket").addEventListener("click", openBasket);
+      $("#closeBasket").addEventListener("click", closeBasket);
+      $("#drawerBackdrop").addEventListener("click", closeBasket);
+    }
+
+    function filteredProducts() {
+      return products.filter((product) => {
+        const text = `${product.name} ${product.id} ${product.sport} ${product.category}`.toLowerCase();
+        return (!state.search || text.includes(state.search)) && (state.sport === "all" || product.sport === state.sport) && (!state.stockOnly || Boolean(product.prices?.[state.market]?.stock));
+      });
+    }
+
+    function renderProducts() {
+      const list = $("#productList");
+      const visible = filteredProducts();
+      $("#resultCount").textContent = `${visible.length} product${visible.length === 1 ? "" : "s"} in your view`;
+      if (!visible.length) {
+        list.innerHTML = `<div class="empty-state"><strong>No products match that scout.</strong>Try another product name, code, or sport.</div>`;
+        return;
+      }
+      const currentMarket = countryFor(state.market);
+      list.innerHTML = visible.map((product) => {
+        const home = marketPrice(product);
+        const best = bestOffer(product, state.stockOnly) || bestOffer(product);
+        const bestCountry = best ? countryFor(best[0]) : countryFor("");
+        const saving = best && offerEur(home) !== null && offerEur(best[1]) !== null ? Math.max(0, offerEur(home) - offerEur(best[1])) : null;
+        return `<button class="product-row ${product.id === state.selectedId ? "selected" : ""}" data-product="${escapeHtml(product.id)}" aria-label="View ${escapeHtml(product.name)}">
+          <div class="product-thumb" aria-hidden="true">${escapeHtml(product.icon)}</div>
+          <div><div class="product-name">${escapeHtml(product.name)}</div><div class="product-meta"><span>${escapeHtml(product.sport)}</span><span class="meta-bullet"></span><span>${escapeHtml(product.id)}</span></div></div>
+          <div class="price-stack"><span class="label">${escapeHtml(currentMarket.short)} price</span><strong>${eur(home.eur)}</strong><span class="price-local">${escapeHtml(home.local)}</span></div>
+          <div class="best-stack"><span class="label">Best found</span><span class="best-country">${bestCountry.flag} ${escapeHtml(bestCountry.short)}</span><strong>${best ? eur(best[1].eur) : "—"}</strong><span class="saving">${saving !== null && saving > .005 ? `Save ${eur(saving)}` : best ? "Lowest here" : "No price"}</span></div>
+          <div class="chevron" aria-hidden="true">›</div>
+        </button>`;
+      }).join("");
+      list.querySelectorAll("[data-product]").forEach((button) => button.addEventListener("click", () => { state.selectedId = button.dataset.product; renderProducts(); renderDetail(); }));
+    }
+
+    function renderDetail() {
+      const product = currentProduct();
+      if (!product) {
+        $("#detailPanel").innerHTML = `<div class="empty-state"><strong>No current catalogue items.</strong>The next successful daily snapshot will appear here.</div>`;
+        return;
+      }
+      const home = marketPrice(product);
+      const offers = bestOffers(product, state.stockOnly);
+      const usableOffers = offers.length ? offers : bestOffers(product);
+      const best = usableOffers[0];
+      const bestCountry = best ? countryFor(best[0]) : countryFor("");
+      const homeValue = offerEur(home);
+      const bestValue = best ? offerEur(best[1]) : null;
+      const savings = homeValue !== null && bestValue !== null ? Math.max(0, homeValue - bestValue) : null;
+      const pricedOffers = usableOffers.filter(([, offer]) => offerEur(offer) !== null);
+      const maxPrice = pricedOffers.length ? Math.max(...pricedOffers.map(([, offer]) => offerEur(offer))) : 0;
+      const inBasket = state.basket.has(product.id);
+      const currentCountry = countryFor(state.market);
+      const bestMarkup = best ? `<div class="best-deal"><div class="deal-place"><span class="deal-flag">${bestCountry.flag}</span><div><strong>${escapeHtml(bestCountry.name)}</strong><span>${best[1].stock ? escapeHtml(best[1].stock_status || "In stock signal") : "Unavailable signal"}</span></div></div><div class="deal-price"><strong>${eur(best[1].eur)}</strong><span>${savings !== null && savings > .005 ? `−${eur(savings)} vs ${escapeHtml(currentCountry.short)}` : "Best available price"}</span></div></div>` : `<div class="empty-state"><strong>No priced market in this snapshot.</strong>The product was discovered, but no comparable numeric offer was parsed.</div>`;
+      const chart = pricedOffers.slice(0, 7).map(([code, offer]) => {
+        const country = countryFor(code);
+        const width = Math.max(13, (offerEur(offer) / maxPrice) * 100);
+        return `<div class="bar-row ${code === state.market ? "current" : ""} ${best && code === best[0] ? "best" : ""}"><div class="bar-label"><span>${country.flag}</span>${escapeHtml(country.short)}</div><div class="bar-track"><div class="bar-fill" style="width:${width}%"></div></div><div class="bar-price">${eur(offer.eur)}</div></div>`;
+      }).join("") || `<div class="empty-state">No normalized EUR offers to chart.</div>`;
+
+      $("#detailPanel").innerHTML = `<div class="detail-top"><div><p class="eyebrow">Product scout</p><h2>${escapeHtml(product.name)}</h2><p>${escapeHtml(product.category)} · ${escapeHtml(product.sample)} · ★ ${escapeHtml(product.rating)}</p></div><div class="detail-icon" aria-hidden="true">${escapeHtml(product.icon)}</div></div>
+        <div class="detail-actions"><button class="primary-button" id="basketAction">${inBasket ? "✓ Saved to basket" : "+ Add to scout basket"}</button><button class="secondary-button" id="copyAction">Copy note</button></div>
+        <div class="detail-section"><div class="section-heading"><h3>Best market in snapshot</h3><span>vs. ${escapeHtml(currentCountry.name)}</span></div>${bestMarkup}</div>
+        <div class="detail-section"><div class="section-heading"><h3>Country price spread</h3><span>normalized EUR</span></div><div class="price-chart">${chart}</div></div>
+        <div class="detail-section"><div class="section-heading"><h3>Decision checks</h3><span>what matters at checkout</span></div><div class="check-list"><div class="check-row"><span><span class="check-icon">✓</span>Product match</span><span class="check-value">Same item code</span></div><div class="check-row"><span><span class="check-icon">✓</span>Availability</span><span class="check-value">${home.stock ? "In stock signal" : "Check local stock"}</span></div><div class="check-row"><span><span class="check-icon">↗</span>Delivery</span><span class="check-value">Country shop rules apply</span></div></div></div>
+        <div class="prototype-note">Snapshot data collected ${escapeHtml(snapshotDate(catalogMeta.generated_at, true))}. Delivery, VAT, returns, and checkout availability can differ by destination.</div>`;
+
+      $("#basketAction").addEventListener("click", () => toggleBasket(product.id));
+      $("#copyAction").addEventListener("click", () => { const text = `DecaScout: ${product.name} — best snapshot price ${best ? eur(best[1].eur) : "not available"} in ${bestCountry.name}`; if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text); showToast("Comparison note copied"); });
+    }
+
+    function renderOverview() {
+      const opportunities = products.map((product) => {
+        const home = marketPrice(product);
+        const best = bestOffer(product);
+        const saving = best && offerEur(home) !== null && offerEur(best[1]) !== null ? Math.max(0, offerEur(home) - offerEur(best[1])) : 0;
+        return { product, saving, best };
+      });
+      const potential = opportunities.reduce((sum, item) => sum + item.saving, 0);
+      const baseline = products.reduce((sum, product) => sum + (offerEur(marketPrice(product)) ?? 0), 0);
+      const largest = [...opportunities].sort((a, b) => b.saving - a.saving)[0];
+      $("#heroSavings").textContent = eur(potential);
+      $("#heroSavingsPct").textContent = `${baseline ? Math.round((potential / baseline) * 100) : 0}%`;
+      $("#largestGap").textContent = largest ? eur(largest.saving) : "—";
+      $("#largestGapName").textContent = largest?.best ? `${largest.product.name} · ${countryFor(largest.best[0]).short}` : "No complete comparison yet";
+      $("#marketsCovered").textContent = Object.keys(countries).length.toLocaleString();
+      $("#productsScouted").textContent = products.length.toLocaleString();
+      $("#snapshotFreshness").textContent = catalogMeta.generated_at ? snapshotDate(catalogMeta.generated_at) : "—";
+      $("#snapshotDate").textContent = catalogMeta.generated_at ? `Generated ${snapshotDate(catalogMeta.generated_at, true)}` : "Waiting for snapshot";
+    }
+
+    function renderBasket() {
+      $("#basketCount").textContent = state.basket.size;
+      const items = products.filter((product) => state.basket.has(product.id));
+      const basketList = $("#basketList");
+      const totalsSection = $("#basketTotalsSection");
+      if (!items.length) {
+        basketList.innerHTML = `<div class="basket-empty"><strong>Your basket is empty</strong>Save a product from the detail panel to compare the full trip across markets.</div>`;
+        totalsSection.innerHTML = "";
+        return;
+      }
+      basketList.innerHTML = items.map((product) => `<div class="basket-item"><div class="basket-item-icon">${escapeHtml(product.icon)}</div><div><strong>${escapeHtml(product.name)}</strong><span>${escapeHtml(product.sport)} · ${escapeHtml(product.id)}</span></div><button class="remove-item" data-remove="${escapeHtml(product.id)}" aria-label="Remove ${escapeHtml(product.name)}">✕</button></div>`).join("");
+      basketList.querySelectorAll("[data-remove]").forEach((button) => button.addEventListener("click", () => toggleBasket(button.dataset.remove)));
+      const totals = Object.entries(countries).map(([code, country]) => {
+        const offers = items.map((product) => product.prices?.[code]).filter(Boolean);
+        const available = offers.length === items.length && offers.every((offer) => offer.stock && offerEur(offer) !== null);
+        const total = available ? offers.reduce((sum, offer) => sum + offerEur(offer), 0) : null;
+        return { code, country, total, available };
+      });
+      const availableTotals = totals.filter((item) => item.available);
+      const bestTotal = availableTotals.length ? Math.min(...availableTotals.map((item) => item.total)) : null;
+      const homeTotal = totals.find((item) => item.code === state.market)?.total ?? null;
+      totalsSection.innerHTML = `<h3>Basket comparison</h3><p>Lowest complete basket is highlighted. Delivery is not yet included.</p><div class="total-table">${totals.sort((a, b) => (a.total ?? Infinity) - (b.total ?? Infinity)).map((item) => `<div class="total-row ${item.available && bestTotal !== null && Math.abs(item.total - bestTotal) < .001 ? "best-total" : ""}"><div class="total-country"><span>${item.country.flag}</span>${escapeHtml(item.country.short)}${item.available ? "" : " · stock gap"}</div><div class="total-price">${item.available ? eur(item.total) : "—"}</div><div class="total-saving">${item.available && homeTotal !== null && homeTotal - item.total > .005 ? `Save ${eur(homeTotal - item.total)}` : item.available && homeTotal !== null && Math.abs(homeTotal - item.total) < .005 ? "Your market" : ""}</div></div>`).join("")}</div>`;
+    }
+
+    function toggleBasket(productId) {
+      if (state.basket.has(productId)) { state.basket.delete(productId); showToast("Removed from scout basket"); }
+      else { state.basket.add(productId); showToast("Saved to scout basket"); }
+      renderBasket();
+      renderDetail();
+    }
+
+    function openBasket() {
+      $("#basketDrawer").inert = false;
+      $("#basketDrawer").classList.add("open");
+      $("#drawerBackdrop").classList.add("open");
+      $("#closeBasket").focus();
+    }
+    function closeBasket() {
+      $("#basketDrawer").classList.remove("open");
+      $("#basketDrawer").inert = true;
+      $("#drawerBackdrop").classList.remove("open");
+      $("#openBasket").focus();
+    }
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && $("#basketDrawer").classList.contains("open")) closeBasket();
+    });
+    function renderAll() { renderProducts(); renderDetail(); renderOverview(); renderBasket(); }
+
+    initControls();
+    renderAll();
+    loadCatalog();
+  </script>
+</body>
+</html>

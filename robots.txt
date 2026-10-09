@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://decascout.sunken.dev/sitemap.xml
