@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-09T00:00:00Z",
+  "base_currency": "EUR",
+  "rates_source": "checked-in fixture",
+  "discovery_source": "Run scripts/discover_catalog.py for the official store list",
+  "store_count": 10,
+  "product_count": 2,
+  "stores": [
+    {"code": "at", "name": "Austria", "short": "AT", "flag": "🇦🇹", "website": "https://www.decathlon.at", "currency": "EUR", "symbol": "€", "status": "fixture", "scan_complete": true},
+    {"code": "de", "name": "Germany", "short": "DE", "flag": "🇩🇪", "website": "https://www.decathlon.de", "currency": "EUR", "symbol": "€", "status": "fixture", "scan_complete": true},
+    {"code": "fr", "name": "France", "short": "FR", "flag": "🇫🇷", "website": "https://www.decathlon.fr", "currency": "EUR", "symbol": "€", "status": "fixture", "scan_complete": true},
+    {"code": "es", "name": "Spain", "short": "ES", "flag": "🇪🇸", "website": "https://www.decathlon.es", "currency": "EUR", "symbol": "€", "status": "fixture", "scan_complete": true},
+    {"code": "it", "name": "Italy", "short": "IT", "flag": "🇮🇹", "website": "https://www.decathlon.it", "currency": "EUR", "symbol": "€", "status": "fixture", "scan_complete": true},
+    {"code": "pl", "name": "Poland", "short": "PL", "flag": "🇵🇱", "website": "https://www.decathlon.pl", "currency": "PLN", "symbol": "zł", "status": "fixture", "scan_complete": true},
+    {"code": "nl", "name": "Netherlands", "short": "NL", "flag": "🇳🇱", "website": "https://www.decathlon.nl", "currency": "EUR", "symbol": "€", "status": "fixture", "scan_complete": true},
+    {"code": "cz", "name": "Czechia", "short": "CZ", "flag": "🇨🇿", "website": "https://www.decathlon.cz", "currency": "CZK", "symbol": "Kč", "status": "fixture", "scan_complete": true},
+    {"code": "ch", "name": "Switzerland", "short": "CH", "flag": "🇨🇭", "website": "https://www.decathlon.ch", "currency": "CHF", "symbol": "CHF", "status": "fixture", "scan_complete": true},
+    {"code": "be", "name": "Belgium", "short": "BE", "flag": "🇧🇪", "website": "https://www.decathlon.be", "currency": "EUR", "symbol": "€", "status": "fixture", "scan_complete": true}
+  ],
+  "products": [
+    {
+      "id": "8738453",
+      "name": "Forclaz MT100 sleeping bag",
+      "sport": "Hiking",
+      "category": "Camping",
+      "icon": "🏕️",
+      "rating": "—",
+      "sample": "Current daily snapshot fixture",
+      "prices": {
+        "at": {"price": 34.99, "currency": "EUR", "local": "€34.99", "eur": 34.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.at/", "observed_at": "2026-10-09T00:00:00Z"},
+        "de": {"price": 29.99, "currency": "EUR", "local": "€29.99", "eur": 29.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.de/", "observed_at": "2026-10-09T00:00:00Z"},
+        "fr": {"price": 32.99, "currency": "EUR", "local": "€32.99", "eur": 32.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.fr/", "observed_at": "2026-10-09T00:00:00Z"},
+        "es": {"price": 31.99, "currency": "EUR", "local": "€31.99", "eur": 31.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.es/", "observed_at": "2026-10-09T00:00:00Z"},
+        "it": {"price": 39.99, "currency": "EUR", "local": "€39.99", "eur": 39.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.it/", "observed_at": "2026-10-09T00:00:00Z"},
+        "pl": {"price": 129, "currency": "PLN", "local": "129 zł", "eur": 29.24, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.pl/", "observed_at": "2026-10-09T00:00:00Z"},
+        "nl": {"price": 34.99, "currency": "EUR", "local": "€34.99", "eur": 34.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.nl/", "observed_at": "2026-10-09T00:00:00Z"},
+        "cz": {"price": 749, "currency": "CZK", "local": "749 Kč", "eur": 29.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.cz/", "observed_at": "2026-10-09T00:00:00Z"},
+        "ch": {"price": 39.9, "currency": "CHF", "local": "CHF 39.90", "eur": 40.64, "stock": false, "stock_status": "Fixture", "url": "https://www.decathlon.ch/", "observed_at": "2026-10-09T00:00:00Z"},
+        "be": {"price": 34.99, "currency": "EUR", "local": "€34.99", "eur": 34.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.be/", "observed_at": "2026-10-09T00:00:00Z"}
+      }
+    },
+    {
+      "id": "8558834",
+      "name": "Kipsta F900 football",
+      "sport": "Football",
+      "category": "Team sports",
+      "icon": "⚽",
+      "rating": "—",
+      "sample": "Current daily snapshot fixture",
+      "prices": {
+        "at": {"price": 19.99, "currency": "EUR", "local": "€19.99", "eur": 19.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.at/", "observed_at": "2026-10-09T00:00:00Z"},
+        "de": {"price": 17.99, "currency": "EUR", "local": "€17.99", "eur": 17.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.de/", "observed_at": "2026-10-09T00:00:00Z"},
+        "fr": {"price": 18.99, "currency": "EUR", "local": "€18.99", "eur": 18.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.fr/", "observed_at": "2026-10-09T00:00:00Z"},
+        "es": {"price": 18.99, "currency": "EUR", "local": "€18.99", "eur": 18.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.es/", "observed_at": "2026-10-09T00:00:00Z"},
+        "it": {"price": 20.99, "currency": "EUR", "local": "€20.99", "eur": 20.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.it/", "observed_at": "2026-10-09T00:00:00Z"},
+        "pl": {"price": 69.99, "currency": "PLN", "local": "69.99 zł", "eur": 15.86, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.pl/", "observed_at": "2026-10-09T00:00:00Z"},
+        "nl": {"price": 19.99, "currency": "EUR", "local": "€19.99", "eur": 19.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.nl/", "observed_at": "2026-10-09T00:00:00Z"},
+        "cz": {"price": 449, "currency": "CZK", "local": "449 Kč", "eur": 17.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.cz/", "observed_at": "2026-10-09T00:00:00Z"},
+        "ch": {"price": 24.9, "currency": "CHF", "local": "CHF 24.90", "eur": 25.38, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.ch/", "observed_at": "2026-10-09T00:00:00Z"},
+        "be": {"price": 18.99, "currency": "EUR", "local": "€18.99", "eur": 18.99, "stock": true, "stock_status": "Fixture", "url": "https://www.decathlon.be/", "observed_at": "2026-10-09T00:00:00Z"}
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+product_id,name,market,market_name,price,currency,eur,stock,stock_status,url,generated_at
+8738453,Forclaz MT100 sleeping bag,at,Austria,34.99,EUR,34.99,True,Fixture,https://www.decathlon.at/,2026-10-09T00:00:00Z
+8738453,Forclaz MT100 sleeping bag,de,Germany,29.99,EUR,29.99,True,Fixture,https://www.decathlon.de/,2026-10-09T00:00:00Z
+8738453,Forclaz MT100 sleeping bag,fr,France,32.99,EUR,32.99,True,Fixture,https://www.decathlon.fr/,2026-10-09T00:00:00Z
+8738453,Forclaz MT100 sleeping bag,es,Spain,31.99,EUR,31.99,True,Fixture,https://www.decathlon.es/,2026-10-09T00:00:00Z
+8738453,Forclaz MT100 sleeping bag,it,Italy,39.99,EUR,39.99,True,Fixture,https://www.decathlon.it/,2026-10-09T00:00:00Z
+8738453,Forclaz MT100 sleeping bag,pl,Poland,129,PLN,29.24,True,Fixture,https://www.decathlon.pl/,2026-10-09T00:00:00Z
+8738453,Forclaz MT100 sleeping bag,nl,Netherlands,34.99,EUR,34.99,True,Fixture,https://www.decathlon.nl/,2026-10-09T00:00:00Z
+8738453,Forclaz MT100 sleeping bag,cz,Czechia,749,CZK,29.99,True,Fixture,https://www.decathlon.cz/,2026-10-09T00:00:00Z
+8738453,Forclaz MT100 sleeping bag,ch,Switzerland,39.90,CHF,40.64,False,Fixture,https://www.decathlon.ch/,2026-10-09T00:00:00Z
+8738453,Forclaz MT100 sleeping bag,be,Belgium,34.99,EUR,34.99,True,Fixture,https://www.decathlon.be/,2026-10-09T00:00:00Z
+8558834,Kipsta F900 football,at,Austria,19.99,EUR,19.99,True,Fixture,https://www.decathlon.at/,2026-10-09T00:00:00Z
+8558834,Kipsta F900 football,de,Germany,17.99,EUR,17.99,True,Fixture,https://www.decathlon.de/,2026-10-09T00:00:00Z
+8558834,Kipsta F900 football,fr,France,18.99,EUR,18.99,True,Fixture,https://www.decathlon.fr/,2026-10-09T00:00:00Z
+8558834,Kipsta F900 football,es,Spain,18.99,EUR,18.99,True,Fixture,https://www.decathlon.es/,2026-10-09T00:00:00Z
+8558834,Kipsta F900 football,it,Italy,20.99,EUR,20.99,True,Fixture,https://www.decathlon.it/,2026-10-09T00:00:00Z
+8558834,Kipsta F900 football,pl,Poland,69.99,PLN,15.86,True,Fixture,https://www.decathlon.pl/,2026-10-09T00:00:00Z
+8558834,Kipsta F900 football,nl,Netherlands,19.99,EUR,19.99,True,Fixture,https://www.decathlon.nl/,2026-10-09T00:00:00Z
+8558834,Kipsta F900 football,cz,Czechia,449,CZK,17.99,True,Fixture,https://www.decathlon.cz/,2026-10-09T00:00:00Z
+8558834,Kipsta F900 football,ch,Switzerland,24.90,CHF,25.38,True,Fixture,https://www.decathlon.ch/,2026-10-09T00:00:00Z
+8558834,Kipsta F900 football,be,Belgium,18.99,EUR,18.99,True,Fixture,https://www.decathlon.be/,2026-10-09T00:00:00Z

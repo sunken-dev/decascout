@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-09T00:00:00Z",
+  "products": {"new": [], "vanished": [], "still_present": []},
+  "stores": {"new": [], "vanished": []},
+  "price_changes": [],
+  "availability_changes": [],
+  "store_product_vanished": [],
+  "scan": {"complete_stores": [], "partial_stores": []}
+}

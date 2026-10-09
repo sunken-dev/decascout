@@ -1,0 +1,16 @@
+{
+  "generated_at": "2026-10-09T00:00:00Z",
+  "discovery_source": "Run scripts/discover_catalog.py for the official store list",
+  "stores": [
+    {"code": "at", "name": "Austria", "short": "AT", "website": "https://www.decathlon.at", "currency": "EUR", "status": "fixture", "scan_complete": true},
+    {"code": "de", "name": "Germany", "short": "DE", "website": "https://www.decathlon.de", "currency": "EUR", "status": "fixture", "scan_complete": true},
+    {"code": "fr", "name": "France", "short": "FR", "website": "https://www.decathlon.fr", "currency": "EUR", "status": "fixture", "scan_complete": true},
+    {"code": "es", "name": "Spain", "short": "ES", "website": "https://www.decathlon.es", "currency": "EUR", "status": "fixture", "scan_complete": true},
+    {"code": "it", "name": "Italy", "short": "IT", "website": "https://www.decathlon.it", "currency": "EUR", "status": "fixture", "scan_complete": true},
+    {"code": "pl", "name": "Poland", "short": "PL", "website": "https://www.decathlon.pl", "currency": "PLN", "status": "fixture", "scan_complete": true},
+    {"code": "nl", "name": "Netherlands", "short": "NL", "website": "https://www.decathlon.nl", "currency": "EUR", "status": "fixture", "scan_complete": true},
+    {"code": "cz", "name": "Czechia", "short": "CZ", "website": "https://www.decathlon.cz", "currency": "CZK", "status": "fixture", "scan_complete": true},
+    {"code": "ch", "name": "Switzerland", "short": "CH", "website": "https://www.decathlon.ch", "currency": "CHF", "status": "fixture", "scan_complete": true},
+    {"code": "be", "name": "Belgium", "short": "BE", "website": "https://www.decathlon.be", "currency": "EUR", "status": "fixture", "scan_complete": true}
+  ]
+}

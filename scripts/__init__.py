@@ -1,0 +1,1 @@
+"""DecaScout catalogue collection helpers."""
